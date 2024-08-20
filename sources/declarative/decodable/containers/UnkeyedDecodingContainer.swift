@@ -57,7 +57,13 @@ extension ShadowDecoder {
     var isAtEnd: Bool {
       self._decoder.source._withUnsafeGuaranteedRef {
         switch self._focus {
-        case .file: return (try? $0.isRowAtEnd(index: self.currentIndex)) ?? false
+        case .file:
+            do {
+                return try $0.isRowAtEnd(index: self.currentIndex)
+            }
+            catch {
+                return true
+            }
         case .row: return $0.isFieldAtEnd(index: self.currentIndex)
         }
       }
